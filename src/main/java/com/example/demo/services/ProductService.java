@@ -34,7 +34,7 @@ public class ProductService {
             return null;
         }
 
-        Product productToSave = new Product(orderProduct.get(), product.getCode(), product.getName(),product.getPrice(),product.getQuantity());
+        Product productToSave = new Product(orderProduct.get(), product.getCode(), product.getName(),product.getPrice(),product.getQuantity(), product.getDescription() );
 
         return productRepository.save(productToSave);
     }

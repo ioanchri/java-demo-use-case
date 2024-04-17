@@ -22,7 +22,7 @@ public class Product {
     private double price;
     private int quantity;
 
-    public Product (OrderProduct orderProduct, double code, String name, double price, int quantity){
+    public Product (OrderProduct orderProduct, double code, String name, double price, int quantity, String description){
         this.orderProduct = orderProduct;
         this.code = code;
         this.name = name;

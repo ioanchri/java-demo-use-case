@@ -5,9 +5,10 @@ import com.example.demo.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,8 +32,50 @@ public class CustomerService {
     }
 
 
+
+
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
+
+
+//    Delete Customer Service
+
+    public void deleteCustomer(@PathVariable Long id) {
+        log.info("Deleting customer with id {}", id);
+        customerRepository.deleteById(id);
+    }
+
+//    Update Customer Service
+
+    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
+        log.info("Updating customer with id {}", id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            Customer existingCustomer = optionalCustomer.get();
+            existingCustomer.setFirstName(updatedCustomer.getFirstName());
+            existingCustomer.setLastName(updatedCustomer.getLastName());
+            existingCustomer.setAddress(updatedCustomer.getAddress());
+            existingCustomer.setEmail(updatedCustomer.getEmail());
+            existingCustomer.setTotalGross(updatedCustomer.getTotalGross());
+            existingCustomer.setPhoneNumber(updatedCustomer.getPhoneNumber());
+            existingCustomer.setDateOfBirth(updatedCustomer.getDateOfBirth());
+
+            return customerRepository.save(existingCustomer);
+        } else {
+            // Handle case where customer with given id is not found
+
+            return null;
+        }
+    }
+
+
+
 }
+
+
+
+
+
+

@@ -7,6 +7,8 @@ import lombok.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Data
@@ -49,6 +51,7 @@ public class Customer implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.createdDate = LocalDate.now();
     }
+
 
 
 }

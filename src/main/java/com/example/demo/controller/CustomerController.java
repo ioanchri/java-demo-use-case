@@ -19,13 +19,27 @@ public class CustomerController {
 
     @PostMapping
     public Customer createCustomer(@RequestBody Customer customer){
-        log.info("New customer recieved { }",customer);
+        log.info("New customer recieved { }", customer);
     return  customerService.createNewCustomer(customer);
     }
 
     @GetMapping
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
+
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable Long id){
+        log.info("Deleting customer with id {}", id);
+        customerService.deleteCustomer(id);
+    }
+
+
+    @PutMapping("/{id}")
+    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
+        log.info("Updating customer with id {}", id);
+        return customerService.updateCustomer(id, updatedCustomer);
     }
 
 }

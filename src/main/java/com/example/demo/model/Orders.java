@@ -3,6 +3,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -20,12 +23,14 @@ public class Orders {
     private String deliveryAddress;
     @Column(nullable = false)
     private double totalAmount;
+    private LocalDate CreatedAt;
 
 
     public Orders (Customer customer, String deliveryAddress, double totalAmount){
         this.customer = customer;
         this.deliveryAddress = deliveryAddress;
         this.totalAmount = totalAmount;
+        this.CreatedAt = LocalDate.now();
     }
 
 }

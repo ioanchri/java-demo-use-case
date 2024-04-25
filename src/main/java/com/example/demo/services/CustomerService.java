@@ -4,6 +4,7 @@ import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,27 +18,47 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @RequestMapping("/customers")
-    public Customer createNewCustomer(Customer customer ){
-        log.info("Creating customer");
-//        Customer customerToSave = new Customer();
-//        customerToSave.setFirstName(customer.getFirstName());
-//        customerToSave.setLastName(customer.getLastName());
-//        customerToSave.setAddress(customer.getAddress());
-//        customerToSave.setEmail(customer.getEmail());
-//        customerToSave.getCreatedDate(LocalDate.now);
 
-        Customer customerToSave = new Customer(customer.getFirstName(), customer.getLastName(), customer.getAddress(),customer.getEmail(),customer.getPhoneNumber(), customer.getVatNumber(),customer.getTotalGross(),customer.getDateOfBirth());
+
+    @RequestMapping("/customers")
+    public Customer createNewCustomer(Customer customer) {
+        log.info("Creating customer");
+        Customer customerToSave = new Customer(customer.getFirstName(), customer.getLastName(), customer.getAddress(), customer.getEmail(), customer.getPhoneNumber(), customer.getVatNumber(), customer.getTotalGross(), customer.getDateOfBirth());
         return customerRepository.save(customerToSave);
     }
 
 
-
-
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public Customer findById(long id) {
+        try {
+            long start = System.currentTimeMillis();
+            log.info("Simulating slow service");
+            //We simulate a slow service
+            Thread.sleep(3000);
+            long end = System.currentTimeMillis();
+            log.info("Simulation ended, time : {}", end - start);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+        return customerRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+
+    @Cacheable("customers")
+    public List<Customer> getAllCustomers() {
+        try {
+            long start = System.currentTimeMillis();
+            log.info("Simulating slow service");
+            //We simulate a slow service
+            Thread.sleep(3000);
+            long end = System.currentTimeMillis();
+            log.info("Simulation ended, time : {}", end - start);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+        return customerRepository.findAll();
+    }
 
 
 //    Delete Customer Service
@@ -69,7 +90,6 @@ public class CustomerService {
             return null;
         }
     }
-
 
 
 }

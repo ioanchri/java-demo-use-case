@@ -5,6 +5,8 @@ import com.example.demo.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +47,7 @@ public class CustomerService {
 
 
     @Cacheable("customers")
-    public List<Customer> getAllCustomers() {
+    public Page<Customer> getAllCustomers(Pageable pageable) {
         try {
             long start = System.currentTimeMillis();
             log.info("Simulating slow service");
@@ -57,7 +59,7 @@ public class CustomerService {
             log.error(e.getMessage());
             Thread.currentThread().interrupt();
         }
-        return customerRepository.findAll();
+        return customerRepository.findAll(pageable);
     }
 
 

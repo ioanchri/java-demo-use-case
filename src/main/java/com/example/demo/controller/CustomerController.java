@@ -5,7 +5,12 @@ import com.example.demo.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 
@@ -26,10 +31,18 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public Page<Customer> findAllCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder) {
 
+        // Creating Pageable instance for pagination and sorting
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        // Fetching customers using the repository
+        return customerService.getAllCustomers(pageable);
     }
+
 
     @GetMapping("/{id}")
     public Customer findByIdCustomer(@PathVariable Long id) {
